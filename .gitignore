@@ -1,0 +1,7 @@
+.vscode/
+# output of the OCR
+text/
+# combined PDF files
+combined/
+# directory with the folders with the seperate pdfs
+files/
