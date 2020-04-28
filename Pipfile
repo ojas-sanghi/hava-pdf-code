@@ -10,7 +10,6 @@ pypdf2 = "*"
 pillow = "*"
 pytesseract = "*"
 pdf2image = "*"
-pil = "*"
 
 [requires]
 python_version = "3.8"

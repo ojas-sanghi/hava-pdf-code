@@ -5,3 +5,7 @@ text/
 combined/
 # directory with the folders with the seperate pdfs
 files/
+# done i placed in a dif folder for testing stuff and all
+tempdone/
+
+__pycache__/
