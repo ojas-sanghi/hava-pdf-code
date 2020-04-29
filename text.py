@@ -1,5 +1,3 @@
-# temp
-
 def find_nth_occurrence(ini_str, sub_str, n):
     # Finding nth occurrence of substring
     val = -1
@@ -32,14 +30,13 @@ def dob1_algo3_2(lines, index):
         new_name = lines[index - i]
         if not dob1_algo3_2_name_check(new_name):
             continue
-        else:
-            name = new_name
-            name = name[name.find(":") + 1:]
-            name = name.strip() 
+        name = new_name
+        name = name[name.find(":") + 1:]
+        name = name.strip() 
 
-            name_list = name.split(" ")
-            name = name_list[1] + " " + name_list[0]
-            break
+        name_list = name.split(" ")
+        name = name_list[1] + " " + name_list[0]
+        break
     # if name:
     #     NOTE: this doesnt get rid of a middle name, idk if this occurence actually uses the middle name or not...
     #     # get rid of a middle name, if any
@@ -76,10 +73,9 @@ def dob1_algo3(lines, index):
         new_name = lines[index - i]
         if not dob1_algo3_name_check(new_name):
             continue
-        else:
-            name = new_name
-            name = name[name.find(":") + 1:]
-            break
+        name = new_name
+        name = name[name.find(":") + 1:]
+        break
     # if name:
     #     NOTE: this doesnt get rid of a middle name, idk if this occurence actually uses the middle name or not...
     #     # get rid of a middle name, if any
@@ -125,9 +121,9 @@ def dob1_algo2(lines, index):
         new_name = lines[index - i]
         if not dob1_algo2_name_check(new_name):
             continue
-        else:
-            name = new_name
-            break
+        name = new_name
+        break
+
     if name:
         # get rid of a middle name, if any
         if name.count(" ") > 1:
@@ -238,9 +234,9 @@ def dob2_algo(lines, index):
         new_name = lines[index - i]
         if not dob2_name_check(new_name):
             continue
-        else:
-            name = new_name
-            break
+        name = new_name
+        break
+    
     if name:
         first_start = find_nth_occurrence(name, " ", 1)
         second_end = find_nth_occurrence(name, " ", 4)
@@ -291,9 +287,9 @@ def dob3_algo(lines, index):
         new_name = lines[index - i]
         if not dob3_name_check(new_name):
             continue
-        else:
-            name = new_name
-            break
+        name = new_name
+        break
+
     if name:
         name_start_index = find_nth_occurrence(name, " ", 2) + 1
         name_mid_index = find_nth_occurrence(name, " ", 3)

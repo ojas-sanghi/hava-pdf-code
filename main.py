@@ -44,9 +44,9 @@ def do_ocr(file_int, paths):
     f = open(outfile, "a")
 
     for path in paths:
-        text = str(((pytesseract.image_to_string(Image.open(path)))))
-        text = text.replace('-\n', '')
-        f.write(text)
+        file_text = str(((pytesseract.image_to_string(Image.open(path)))))
+        file_text = file_text.replace('-\n', '')
+        f.write(file_text)
     f.close()
 
 def get_data_from_list(data_list):
