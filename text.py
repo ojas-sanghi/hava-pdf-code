@@ -10,6 +10,90 @@ def find_nth_occurrence(ini_str, sub_str, n):
         val = ini_str.find(sub_str, val + 1)
     return val
 
+def dob1_algo3_2_name_check(name):
+    if name == "":
+        return False
+
+    if not name.startswith("Beneficiary:"):
+        return False
+
+    return True
+
+def dob1_algo3_2(lines, index):
+    dob = lines[index]
+    space_index = 4
+
+    name = False
+
+    # extract the dob
+    dob = dob[space_index + 1:]
+    # get rid of the 19 (like from 1933)
+    correct_dob = dob[:len(dob)-4]
+    correct_dob += dob[len(dob)-2:]
+
+    for i in range(1, 11):
+        new_name = lines[index - i]
+        if not dob1_algo3_2_name_check(new_name):
+            continue
+        else:
+            name = new_name
+            name = name[name.find(":") + 1:]
+            name = name.strip() 
+
+            name_list = name.split(" ")
+            name = name_list[1] + " " + name_list[0]
+            break
+    # if name:
+    #     NOTE: this doesnt get rid of a middle name, idk if this occurence actually uses the middle name or not...
+    #     # get rid of a middle name, if any
+    #     if name.count(" ") > 1:
+    #         # first_space = name.find(" ")
+    #         # second_space = name.find(" ", first_space + 1)
+    #         # name = name[:second_space]
+    #         name = name.replace(",", "")
+
+    return [name, correct_dob]
+
+def dob1_algo3_name_check(name):
+    if name == "":
+        return False
+
+    if not name.startswith("RE:"):
+        return False
+
+    return True
+
+def dob1_algo3(lines, index):
+    dob = lines[index]
+    space_index = 4
+
+    name = False
+
+    # extract the dob
+    dob = dob[space_index + 1:]
+    # get rid of the 19 (like from 1933)
+    correct_dob = dob[:len(dob)-4]
+    correct_dob += dob[len(dob)-2:]
+
+    for i in range(1, 11):
+        new_name = lines[index - i]
+        if not dob1_algo3_name_check(new_name):
+            continue
+        else:
+            name = new_name
+            name = name[name.find(":") + 1:]
+            break
+    # if name:
+    #     NOTE: this doesnt get rid of a middle name, idk if this occurence actually uses the middle name or not...
+    #     # get rid of a middle name, if any
+    #     if name.count(" ") > 1:
+    #         # first_space = name.find(" ")
+    #         # second_space = name.find(" ", first_space + 1)
+    #         # name = name[:second_space]
+    #         name = name.replace(",", "")
+
+    return [name, correct_dob]
+
 def dob1_algo2_name_check(name):
     if name == "":
         return False
@@ -99,14 +183,18 @@ def dob1_algo_chooser(lines):
 
         algo1_result = None
         algo2_result = None
+        algo3_result = None
 
         # if there's not a space, it's algo1
         if dob[4] != " ":
             algo1_result = dob1_algo1(lines, dob_index)
-
+        
         if dob[4] == " ":
             if dob[-8] == ",":
                 algo2_result = dob1_algo2(lines, dob_index)
+            algo3_result= dob1_algo3(lines, dob_index)
+            if False in algo3_result:
+                algo3_result = dob1_algo3_2(lines, dob_index)
 
         if algo1_result:
             if not False in algo1_result:
@@ -114,6 +202,9 @@ def dob1_algo_chooser(lines):
         if algo2_result:
             if not False in algo2_result:
                 return algo2_result
+        if algo3_result:
+            if not False in algo3_result:
+                return algo3_result
         continue
     return False
 
@@ -290,8 +381,40 @@ def master_algo_chooser(lines):
     # We couldn't find anything :(
     return [False, False]
 
+def get_data_from_list(data_list):
+    name = data_list[0]
+    if name:
+        name_list = name.split(" ")
+        last_name = name_list[0].title()
+        first_name = name_list[1].title()
+    else:
+        last_name = "ERROR"
+        first_name = "ERROR"
+
+    dob = data_list[1]
+    if dob:
+        dob_list = dob.split("/")
+
+        year = dob_list[2]
+        year = "19" + year
+
+        month = dob_list[0]
+        if len(month) == 1:
+            month = "0" + month
+
+        date = dob_list[1]
+        if len(date) == 1:
+            date = "0" + date
+    else:
+        year = "YYYY"
+        month = "MM"
+        date = "DD"
+    
+    return [last_name, first_name, year, month, date]
+
 def find_info(file_int, test = False):
-    # Note: test mode depends on the .txt file (from OCR) already existing
+    # Note: test mode depends on the .txt file (from OCR) already existing\
+    file_int = str(file_int)
     file = "./text/out_text" + file_int + ".txt"
     lines = []
 
@@ -301,10 +424,28 @@ def find_info(file_int, test = False):
     result = master_algo_chooser(lines)
 
     if test:
+        data = get_data_from_list(result)
+        new_file_name = f"./combined/{data[0]}_{data[1]}_DOB-{data[2]}-{data[3]}-{data[4]}_File-{file_int}.pdf"
+
         print(result)
-        sys.exit(0)
+        print(new_file_name)
+        
+        if data[0] != "ERROR":
+            return True
+        return False
+
     return result
 
 if __name__ == "__main__":
-    file_int = "5620"
-    print(find_info(file_int, True))
+    file_int = "7002"
+    find_info(file_int, True)
+
+    a = [5610, 5614, 5633, 5640, 5652,  5663, 5676, 5679, 5686, 5688, 5697, 5715, 5725, 5732, 5740, 5743, 5745, 5751, 5752,5756,5758,5759,5760,5773,5775,5776,5777, 5778,5779,5781,5784,5785,5786,5790,5794,5795,5796,5797]
+    count = 0
+    for n in a:
+        r = find_info(n, True)
+        if r:
+            count += 1
+    
+    print("\n\nsuccessful: ", end = "")
+    print(str(count) + " / " + str(len(a)))

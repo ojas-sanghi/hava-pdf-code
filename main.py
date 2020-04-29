@@ -49,9 +49,7 @@ def do_ocr(file_int, paths):
         f.write(text)
     f.close()
 
-def rename_file(file_int, data_list):
-    current_file_name = "./combined/LastName_FirstName_DOB-YYYY-MM-DD_File-" + file_int + ".pdf"
-
+def get_data_from_list(data_list):
     name = data_list[0]
     if name:
         name_list = name.split(" ")
@@ -79,8 +77,15 @@ def rename_file(file_int, data_list):
         year = "YYYY"
         month = "MM"
         date = "DD"
+    
+    return [last_name, first_name, year, month, date]
 
-    new_file_name = f"./combined/{last_name}_{first_name}_DOB-{year}-{month}-{date}_File-{file_int}.pdf"
+def rename_file(file_int, data_list):
+    current_file_name = "./combined/LastName_FirstName_DOB-YYYY-MM-DD_File-" + file_int + ".pdf"
+
+    data = get_data_from_list(data_list)
+
+    new_file_name = f"./combined/{data[0]}_{data[1]}_DOB-{data[2]}-{data[3]}-{data[4]}_File-{file_int}.pdf"
 
     try:
         os.rename(current_file_name, new_file_name)
