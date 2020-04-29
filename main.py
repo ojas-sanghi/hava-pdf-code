@@ -41,13 +41,12 @@ def convert_pdf_image(file_path, file_int):
 
 def do_ocr(file_int, paths):
     outfile = "./text/out_text" + file_int + ".txt"
-    f = open(outfile, "a")
+    with open(outfile, "a") as f:
 
-    for path in paths:
-        file_text = str(((pytesseract.image_to_string(Image.open(path)))))
-        file_text = file_text.replace('-\n', '')
-        f.write(file_text)
-    f.close()
+        for path in paths:
+            file_text = str(((pytesseract.image_to_string(Image.open(path)))))
+            file_text = file_text.replace('-\n', '')
+            f.write(file_text)
 
 def get_data_from_list(data_list):
     name = data_list[0]
@@ -132,6 +131,7 @@ def main():
     except KeyboardInterrupt:
         pool.terminate()
         sys.exit()
+    # skipcq: PYL-W0703
     except Exception:
         print(traceback.format_exc())
 

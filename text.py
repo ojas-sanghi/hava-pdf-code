@@ -1,6 +1,8 @@
+# skipcq: PYL-W0621
 def find_nth_occurrence(ini_str, sub_str, n):
     # Finding nth occurrence of substring
     val = -1
+    # skipcq: PYL-W0612
     for i in range(0, n):
         val = ini_str.find(sub_str, val + 1)
     return val
@@ -404,6 +406,7 @@ def get_data_from_list(data_list):
     
     return [last_name, first_name, year, month, date]
 
+# skipcq: PYL-W0621
 def find_info(file_int, test = False):
     # Note: test mode depends on the .txt file (from OCR) already existing\
     file_int = str(file_int)
