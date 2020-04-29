@@ -280,7 +280,6 @@ def dob3_name_check(name):
 # dob3 -> "Date of Birth:"
 def dob3_algo(lines, index):
     dob = lines[index]
-    space_index = 12
 
     name = False
     correct_name = False
