@@ -1,7 +1,4 @@
 # temp
-import sys
-
-import traceback
 
 def find_nth_occurrence(ini_str, sub_str, n):
     # Finding nth occurrence of substring

@@ -1,4 +1,4 @@
-from PyPDF2 import PdfFileMerger, PdfFileReader
+from PyPDF2 import PdfFileMerger
 import os
 
 from PIL import Image
