@@ -1,3 +1,5 @@
+import traceback
+
 # skipcq: PYL-W0621
 def find_nth_occurrence(ini_str, sub_str, n):
     # Finding nth occurrence of substring
@@ -15,6 +17,14 @@ def dob1_algo3_2_name_check(name):
         return False
 
     return True
+
+"""
+Beneficiary: John Doe
+
+Phone: N/A
+
+DOB: xx/xx/xxxx
+"""
 
 def dob1_algo3_2(lines, index):
     dob = lines[index]
@@ -36,6 +46,8 @@ def dob1_algo3_2(lines, index):
         name = name[name.find(":") + 1:]
         name = name.strip() 
 
+        # swap first name and last name 
+        # should be lastname firstname
         name_list = name.split(" ")
         name = name_list[1] + " " + name_list[0]
         break
@@ -59,6 +71,10 @@ def dob1_algo3_name_check(name):
 
     return True
 
+"""
+RE: Doe John
+DOB: xx/xx/xxxx
+"""
 def dob1_algo3(lines, index):
     dob = lines[index]
     space_index = 4
@@ -77,15 +93,14 @@ def dob1_algo3(lines, index):
             continue
         name = new_name
         name = name[name.find(":") + 1:]
-        break
-    # if name:
-    #     NOTE: this doesnt get rid of a middle name, idk if this occurence actually uses the middle name or not...
-    #     # get rid of a middle name, if any
-    #     if name.count(" ") > 1:
-    #         # first_space = name.find(" ")
-    #         # second_space = name.find(" ", first_space + 1)
-    #         # name = name[:second_space]
-    #         name = name.replace(",", "")
+        name = name.strip()
+    
+    if name:
+        # get rid of a middle name, if any
+        if name.count(" ") > 1:
+            first_space = name.find(" ")
+            second_space = name.find(" ", first_space + 1)
+            name = name[:second_space]
 
     return [name, correct_dob]
 
@@ -107,6 +122,11 @@ def dob1_algo2_name_check(name):
 
     return True
 
+"""
+DOE, MIDDLENAME JOHN
+Current Meds MRN: 12345678901
+DOB: X/X/XXXX, Sex: X
+"""
 def dob1_algo2(lines, index):
     dob = lines[index]
     space_index = 4
@@ -148,6 +168,10 @@ def dob1_algo1_name_check(name):
 
     return True
 
+"""
+DOE, JOHN
+DOB:XX/XX/XX
+"""
 def dob1_algo1(lines, index):
     dob = lines[index]
     name = lines[index - 1]
@@ -175,6 +199,9 @@ def dob1_algo_chooser(lines):
 
     for dob_index in dob_indexes:
         dob = lines[dob_index]
+        # sometimes, it's just: "DOB:" so we need to check for that
+        if len(dob) <= 5:
+            continue
 
         algo1_result = None
         algo2_result = None
@@ -220,6 +247,16 @@ def dob2_name_check(name):
     return True
 
 # dob2 -> "DOB/"
+"""
+Patient: DOE , JOE MIDDLENAME Location: Spc Procedure
+MRN: 12345678 Copy to: DoctorLastName, DoctorFirstName
+FIN: 123456789
+
+ 
+
+DOB/Age/Sex: XX/XX/XXXX XX years Gender
+"""
+
 def dob2_algo(lines, index):
     dob = lines[index]
 
@@ -273,6 +310,13 @@ def dob3_name_check(name):
     return True
 
 # dob3 -> "Date of Birth:"
+"""
+Report ID: 12345678 End of Service Summary Report Y/Y/YYYY
+Patient Name: John Doe Prescribing Physician: DoctorFirstName DoctorLastName, MD
+
+Date of Birth: X/XX/XXXX Gender: F <Office Location>
+"""
+
 def dob3_algo(lines, index):
     dob = lines[index]
 
@@ -327,7 +371,15 @@ def dob4_name_check(name):
 
     return True
 
-# dob3 -> "Date of Birth:"
+"""
+Doe, John Y/Y/YYYY CardioNet Summary Report Page 1 of 2
+Copyright � 2002-2011 CardioNet Inc. All Rights Reserved.ardionet, Inc
+
+Doe, John Y/Y/YYYY CardioNet Summary Report
+"""
+# doesn't work??
+# name only
+# idek
 def dob4_algo(lines, index):
     name = lines[index]
 
@@ -416,7 +468,12 @@ def find_info(file_int, test = False):
     with open(file) as f:
         lines = [line.rstrip() for line in f]
 
-    result = master_algo_chooser(lines)
+    try:
+        result = master_algo_chooser(lines)
+    except:
+        print("TEXT ERROR OCCURED WITH: " + str(file_int))
+        traceback.print_exc()
+        return [False, False]
 
     if test:
         data = get_data_from_list(result)
@@ -432,15 +489,12 @@ def find_info(file_int, test = False):
     return result
 
 if __name__ == "__main__":
-    file_int = "7002"
-    find_info(file_int, True)
+    file_int = "6000"
+    result = find_info(file_int, True)
+    print(result)
 
-    a = [5610, 5614, 5633, 5640, 5652,  5663, 5676, 5679, 5686, 5688, 5697, 5715, 5725, 5732, 5740, 5743, 5745, 5751, 5752,5756,5758,5759,5760,5773,5775,5776,5777, 5778,5779,5781,5784,5785,5786,5790,5794,5795,5796,5797]
-    count = 0
-    for n in a:
-        r = find_info(n, True)
-        if r:
-            count += 1
-    
-    print("\n\nsuccessful: ", end = "")
-    print(str(count) + " / " + str(len(a)))
+    fi = [6003]
+    for i in fi:
+        i = str(i)
+        # result = find_info(i, True)
+        # print(result)

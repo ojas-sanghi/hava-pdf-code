@@ -5,6 +5,7 @@ from PIL import Image
 import pytesseract
 import sys
 from pdf2image import convert_from_path
+from pdf2image.exceptions import PDFPageCountError
 
 from multiprocessing import Pool
 
@@ -36,7 +37,12 @@ def combine_pdf(file_int):
     return file_path
 
 def convert_pdf_image(file_path, file_int):
-    paths = convert_from_path(file_path, 500, thread_count=4, output_folder = "./files/" + file_int + "/", fmt="jpeg", paths_only=True)
+    try:
+        paths = convert_from_path(file_path, 500, thread_count=4, output_folder = "./files/" + file_int + "/", fmt="jpeg", paths_only=True)
+    except PDFPageCountError:
+        print("\nWARN: " + str(file_int) + " has no pages")
+        print("Skipping this set...\n")
+        paths = False
     return paths
 
 def do_ocr(file_int, paths):
@@ -102,6 +108,9 @@ def do_thing(file_int):
     print("done combining, saving imgs: " + file_int)
 
     paths = convert_pdf_image(temp_file_path, file_int)
+    if not paths:
+        print("ALL DONE FOR: " + file_int)
+        return file_int
     print("done saving imgs, doing ocr: " + file_int)
 
     do_ocr(file_int, paths)
@@ -119,7 +128,7 @@ def main():
     path = "./files/"
     files = [f for f in os.listdir(path)]
 
-    pool = Pool(6)
+    pool = Pool(5)
     start_time = time.time()
 
     done = []
@@ -150,7 +159,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-##
-# we should also detect the "DOB/AGE/" part too
-# thatll be nice, so we have 2 methods of finding it
