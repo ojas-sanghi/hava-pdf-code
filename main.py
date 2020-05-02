@@ -14,6 +14,8 @@ import traceback
 
 import text
 
+import cProfile
+
 def combine_pdf(file_int):
     merger = PdfFileMerger()
     # relative path to the folder
@@ -50,7 +52,7 @@ def do_ocr(file_int, paths):
     with open(outfile, "a") as f:
 
         for path in paths:
-            file_text = str(((pytesseract.image_to_string(Image.open(path)))))
+            file_text = pytesseract.image_to_string(path)
             file_text = file_text.replace('-\n', '')
             f.write(file_text)
 
@@ -129,7 +131,6 @@ def main():
     files = [f for f in os.listdir(path)]
 
     pool = Pool(5)
-    start_time = time.time()
 
     done = []
 
@@ -153,9 +154,10 @@ def main():
     print("~ ~ not done for some reason: ")
     print(files, end = "~ ~ \n\n")
 
-    print("--- %s seconds ---" % (time.time() - start_time))
+    print("\n\n ----- DONE WITH ALL FILES ----- \n\n")
+    
     sys.exit(0)
 
 
 if __name__ == "__main__":
-    main()
+    cProfile.run('main()')

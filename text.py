@@ -489,12 +489,7 @@ def find_info(file_int, test = False):
     return result
 
 if __name__ == "__main__":
-    file_int = "6000"
-    result = find_info(file_int, True)
-    print(result)
+    import cProfile
 
-    fi = [6003]
-    for i in fi:
-        i = str(i)
-        # result = find_info(i, True)
-        # print(result)
+    file_int = "5800"
+    cProfile.run('find_info(file_int, True)')
