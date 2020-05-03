@@ -56,41 +56,47 @@ def do_ocr(file_int, paths):
             file_text = file_text.replace('-\n', '')
             f.write(file_text)
 
-def get_data_from_list(data_list):
-    name = data_list[0]
-    if name:
-        name_list = name.split(" ")
-        last_name = name_list[0].title()
-        first_name = name_list[1].title()
-    else:
-        last_name = "ERROR"
-        first_name = "ERROR"
+def get_data_from_list(data_list, file_int):
+    try:
+        name = data_list[0]
+        if name:
+            name_list = name.split(" ")
+            last_name = name_list[0].title()
+            first_name = name_list[1].title()
+        else:
+            last_name = "ERROR"
+            first_name = "ERROR"
 
-    dob = data_list[1]
-    if dob:
-        dob_list = dob.split("/")
+        dob = data_list[1]
+        if dob:
+            dob_list = dob.split("/")
 
-        year = dob_list[2]
-        year = "19" + year
+            year = dob_list[2]
+            year = "19" + year
 
-        month = dob_list[0]
-        if len(month) == 1:
-            month = "0" + month
+            month = dob_list[0]
+            if len(month) == 1:
+                month = "0" + month
 
-        date = dob_list[1]
-        if len(date) == 1:
-            date = "0" + date
-    else:
-        year = "YYYY"
-        month = "MM"
-        date = "DD"
-    
-    return [last_name, first_name, year, month, date]
+            date = dob_list[1]
+            if len(date) == 1:
+                date = "0" + date
+        else:
+            year = "YYYY"
+            month = "MM"
+            date = "DD"
+        
+        return [last_name, first_name, year, month, date]
+    except:
+        print("\n\nERROR PARSING DATA: " + str(file_int) + "\n")
+        traceback.print_exc()
+        print("\n")
+        return ["ERROR", "ERROR", "YYYY", "MM", "DD"]
 
 def rename_file(file_int, data_list):
     current_file_name = "./combined/LastName_FirstName_DOB-YYYY-MM-DD_File-" + file_int + ".pdf"
 
-    data = get_data_from_list(data_list)
+    data = get_data_from_list(data_list, file_int)
 
     new_file_name = f"./combined/{data[0]}_{data[1]}_DOB-{data[2]}-{data[3]}-{data[4]}_File-{file_int}.pdf"
 
